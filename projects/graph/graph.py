@@ -73,9 +73,11 @@ class Graph:
 
         This should be done using recursion.
         """
+        # end condition is when all veticies have been visited
         while starting_vertex not in visited:
             print(starting_vertex)
             visited.add(starting_vertex)
+            # use recursion on each neighbor to traverse the whole graph
             for neighbor in self.get_neighbors(starting_vertex):
                 self.dft_recursive(neighbor,visited)
 
@@ -132,17 +134,23 @@ class Graph:
 
         This should be done using recursion.
         """
+        # set a stopping condition for when the vertex is found
         if starting_vertex == destination_vertex:
             currPath.append(starting_vertex)
             return currPath
         else:
             visited.add(starting_vertex)
             currPath.append(starting_vertex)
+            # go through the neighbors to find all not visisted
             for neighbor in self.get_neighbors(starting_vertex):
                 if neighbor not in visited:
+                    # if not visited use recursion on each neighbor
                     self.dfs_recursive(neighbor,destination_vertex,visited)
+                    # set a condition for if the vertex is found
                     if currPath[-1] == destination_vertex:
                         return currPath
+                    # take off any from a path that doesn't lead to the
+                    # destination.
                     else:
                         currPath.pop()
 
