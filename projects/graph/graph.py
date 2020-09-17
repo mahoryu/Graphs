@@ -46,10 +46,9 @@ class Graph:
             currNode = queue.popleft()
             if currNode not in visited:
                 visited.add(currNode)
-                print(currNode, end= " ")
+                print(currNode)
                 for neighbor in self.get_neighbors(currNode):
                     queue.append(neighbor)
-        print()
 
     def dft(self, starting_vertex):
         """
@@ -63,10 +62,9 @@ class Graph:
             currNode = stack.pop()
             if currNode not in visited:
                 visited.add(currNode)
-                print(currNode, end=" ")
+                print(currNode)
                 for neighbor in self.get_neighbors(currNode):
                     stack.append(neighbor)
-        print()
 
     def dft_recursive(self, starting_vertex, visited = set()):
         """
@@ -76,7 +74,7 @@ class Graph:
         This should be done using recursion.
         """
         while starting_vertex not in visited:
-            print(starting_vertex, end= " ")
+            print(starting_vertex)
             visited.add(starting_vertex)
             for neighbor in self.get_neighbors(starting_vertex):
                 self.dft_recursive(neighbor,visited)
@@ -125,7 +123,8 @@ class Graph:
                     stack.append(newPath)
 
 
-    def dfs_recursive(self, starting_vertex, destination_vertex):
+    def dfs_recursive(self, starting_vertex, destination_vertex, \
+                            visited = set(), currPath = []):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -133,7 +132,20 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        if starting_vertex == destination_vertex:
+            currPath.append(starting_vertex)
+            return currPath
+        else:
+            visited.add(starting_vertex)
+            currPath.append(starting_vertex)
+            for neighbor in self.get_neighbors(starting_vertex):
+                if neighbor not in visited:
+                    self.dfs_recursive(neighbor,destination_vertex,visited)
+                    if currPath[-1] == destination_vertex:
+                        return currPath
+                    else:
+                        currPath.pop()
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
