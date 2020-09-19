@@ -8,7 +8,6 @@ class Graph:
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
     def __init__(self):
         self.vertices = {}
-        Stack()
 
     def __repr__(self):
         return str(self.vertices)
@@ -207,7 +206,6 @@ if __name__ == '__main__':
     '''
     graph.dft(1)
     graph.dft_recursive(1)
-    print()
     '''
     Valid BFS path:
         [1, 2, 4, 6]
