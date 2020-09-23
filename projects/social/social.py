@@ -91,6 +91,16 @@ class SocialGraph:
 
         return visited
 
+        # Testing to get percentages and averages for the questions
+        # in the README
+
+        # total = 0
+        # for item in visited:
+        #     total += len(visited[item])
+        # average = total / len(visited)
+        # return len(visited)
+        # return average
+
 
 if __name__ == '__main__':
     sg = SocialGraph()
@@ -98,3 +108,10 @@ if __name__ == '__main__':
     print(sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
+
+    # print("\n\n")
+
+    # sg2 = SocialGraph()
+    # sg2.populate_graph(1000, 5)
+    # connections = sg2.get_all_social_paths(1)
+    # print(connections)
