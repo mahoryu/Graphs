@@ -2,7 +2,6 @@ from room import Room
 from player import Player
 from world import World
 from collections import deque
-import random
 
 import random
 from ast import literal_eval
@@ -95,6 +94,7 @@ def find_closest_new_room():
             continue
         for key in list(my_graph[currNode].keys()):
             if my_graph[currNode][key] == "?":
+                # returns the path as well as the direction of the first ? found
                 return currPath, key
 
         visited.add(currNode)
@@ -124,6 +124,8 @@ add_curr_room_to_graph()
 goal = len(room_graph)
 while len(my_graph) < len(room_graph):
     keep_going = True
+    # moves the player until there is no new room visible
+    # to the player.
     while keep_going:
         keep_going = move_new_room()
     path = find_closest_new_room()
