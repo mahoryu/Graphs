@@ -13,10 +13,10 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
+# map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -40,18 +40,28 @@ traversal_path = []
 my_graph = {}
 
 def move(direction):
+    # cancel exception for the follow path function
+    # so that it doesn't try to move when the path is
+    # only listing the current room
     if direction == "c":
         return
 
+    # get room id of this room and the one we are moving to
     currRoom = player.current_room.id
     nextRoom = player.current_room.get_room_in_direction(direction).id
+    # replace the ? info for this room
     my_graph[currRoom][direction] = nextRoom
+    # move to the next room
     player.travel(direction)
+    # add movement to path
     traversal_path.append(direction)
 
+    # add the next room to the graph if it is unexplored
     if nextRoom not in my_graph:
         add_curr_room_to_graph()
 
+    # add the now privious room to the current room in the graph
+    # to the direction opposite of the direction we just moved
     if direction == "n":
         my_graph[nextRoom]["s"] = currRoom
     elif direction == "s":
@@ -63,6 +73,7 @@ def move(direction):
 
 
 def add_curr_room_to_graph():
+    # adds the new room to the graph making sure all exits are ?
     exits = {}
     for exit in player.current_room.get_exits():
         exits[exit] = "?"
@@ -70,6 +81,9 @@ def add_curr_room_to_graph():
 
 
 def find_closest_new_room():
+    # bredth first search to find the first empty room on the graph
+    # returns a list of tuples that are the room id and the direction
+    # needed to move to get to the listed room
     currRoom = player.current_room.id
     visited = set()
     queue = deque()
@@ -77,16 +91,18 @@ def find_closest_new_room():
     while len(queue) > 0:
         currPath = queue.popleft()
         currNode = currPath[-1][0]
+        if currNode in visited:
+            continue
         for key in list(my_graph[currNode].keys()):
             if my_graph[currNode][key] == "?":
                 return currPath, key
-        if currNode not in visited:
-            visited.add(currNode)
-            for key in list(my_graph[currNode].keys()):
-                newPath = list(currPath)
-                newPath.append((my_graph[currNode][key],key))
-                queue.append(newPath)
-        return None
+
+        visited.add(currNode)
+        for key in list(my_graph[currNode].keys()):
+            newPath = list(currPath)
+            newPath.append((my_graph[currNode][key],key))
+            queue.append(newPath)
+    return None
 
 
 def follow_path(path):
@@ -110,7 +126,8 @@ while len(my_graph) < len(room_graph):
     keep_going = True
     while keep_going:
         keep_going = move_new_room()
-    follow_path(find_closest_new_room())
+    path = find_closest_new_room()
+    follow_path(path)
 
 
 ### Testing ###
@@ -118,8 +135,8 @@ while len(my_graph) < len(room_graph):
 # print(find_closest_new_room())
 # follow_path(find_closest_new_room())
 
-print(my_graph)
-print(f"Current Room: {player.current_room.id}")
+# print(my_graph)
+# print(f"Current Room: {player.current_room.id}")
 ###############
 
 
